@@ -4,10 +4,7 @@ Given a single stranded DNA string, compute how many times each nucleotide occur
 
 The genetic language of every living thing on the planet is DNA.
 DNA is a large molecule that is built from an extremely long sequence of individual elements called nucleotides.
-4 types exist in DNA and these differ only slightly and can be represented as the following symbols:
-'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' thymine.
-
-AGCCTAAAG
+4 types exist in DNA and these differ only slightly and can be represented as the following symbols: 'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' thymine.
 
 Here is an analogy:
 - twigs are to birds nests as
@@ -20,7 +17,7 @@ Here is an analogy:
 Execute the tests with:
 
 ```bash
-$ elixir nucleotide_count_test.exs
+$ mix test
 ```
 
 ### Pending tests
@@ -46,8 +43,9 @@ Or, you can enable all the tests by commenting out the
 # ExUnit.configure exclude: :pending, trace: true
 ```
 
-For more detailed information about the Elixir track, please
-see the [help page](http://exercism.io/languages/elixir).
+If you're stuck on something, it may help to look at some of
+the [available resources](https://exercism.io/tracks/elixir/resources)
+out there where answers might be found.
 
 ## Source
 
