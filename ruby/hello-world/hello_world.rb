@@ -1,11 +1,5 @@
 class HelloWorld
-
-  def self.hello name = nil
-    if name.nil?
-      "Hello, World!"
-    else
-      "Hello, #{name}!"
-    end
+  def self.hello(name = nil)
+    "Hello, #{name || "World"}!"
   end
-
 end
