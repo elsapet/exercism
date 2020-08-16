@@ -4,7 +4,8 @@ defmodule WordCount do
 
   Words are compared case-insensitively.
   """
-  @word_regex ~r/[^\p{L}\p{N}\-]/
+  # @word_regex ~r/[^\p{L}\p{N}\-]/
+  @word_regex ~r/[^[:alnum:]-]/u
 
   def count(sentence) do
     String.downcase(sentence)
