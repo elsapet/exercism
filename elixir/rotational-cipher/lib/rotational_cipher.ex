@@ -9,7 +9,7 @@ defmodule RotationalCipher do
 
   def rotate(text, shift) do
     to_charlist(text)
-    |> Enum.map(fn c -> shift_char(c, shift) end)
+    |> Enum.map(&shift_char(&1, shift))
     |> to_string
   end
 
@@ -17,20 +17,21 @@ defmodule RotationalCipher do
     shifted_char = char + shift
 
     cond do
-      char in 65..90 ->
-        case shifted_char > 90 do
-          true -> 65 + (shifted_char - 91)
-          false -> shifted_char
-        end
+      char in ?a..?z ->
+        wraparound_shift(shifted_char, ?a, ?z)
 
-      char in 97..122 ->
-        case shifted_char > 122 do
-          true -> 97 + (shifted_char - 123)
-          false -> shifted_char
-        end
+      char in ?A..?Z ->
+        wraparound_shift(shifted_char, ?A, ?Z)
 
       true ->
         char
+    end
+  end
+
+  defp wraparound_shift(shifted_char, initial, limit) do
+    case shifted_char > limit do
+      true -> initial + shifted_char - (limit + 1)
+      false -> shifted_char
     end
   end
 end
