@@ -4,7 +4,7 @@ defmodule ProteinTranslation do
   """
   @spec of_rna(String.t()) :: {atom, list(String.t())}
   def of_rna(rna) do
-    rna_to_protein([], rna)
+    rna_to_protein(rna, [])
   end
 
   @doc """
@@ -57,26 +57,18 @@ defmodule ProteinTranslation do
     end
   end
 
-  defp rna_to_protein(list, rna) do
-    <<codon::binary-size(3), remaining_rna::binary>> = rna
-
+  defp rna_to_protein(<<codon::binary-size(3), remaining_rna::binary>>, acc) do
     case of_codon(codon) do
       {:error, _} ->
         {:error, "invalid RNA"}
 
       {:ok, "STOP"} ->
-        {:ok, list}
+        {:ok, acc}
 
-      {:ok, codon} ->
-        new_list = list ++ [codon]
-
-        case remaining_rna do
-          "" ->
-            {:ok, new_list}
-
-          _ ->
-            rna_to_protein(new_list, remaining_rna)
-        end
+      {:ok, protein} ->
+        rna_to_protein(remaining_rna, acc ++ [protein])
     end
   end
+
+  defp rna_to_protein("", acc), do: {:ok, acc}
 end
