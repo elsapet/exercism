@@ -1,24 +1,4 @@
 defmodule RobotSimulator do
-  @turn_right %{
-    :north => :east,
-    :east => :south,
-    :south => :west,
-    :west => :north
-  }
-
-  @turn_left %{
-    :north => :west,
-    :east => :north,
-    :south => :east,
-    :west => :south
-  }
-
-  @advance %{
-    :north => {0, 1},
-    :east => {1, 0},
-    :south => {0, -1},
-    :west => {-1, 0}
-  }
   @doc """
   Create a Robot Simulator given an initial direction and position.
 
@@ -42,8 +22,6 @@ defmodule RobotSimulator do
     {:error, "invalid position"}
   end
 
-  # LAAARALA
-
   def simulate(robot, "") do
     robot
   end
@@ -53,17 +31,11 @@ defmodule RobotSimulator do
     instructions
     |> String.graphemes()
     |> Enum.reduce_while(robot, fn
-      "R", robot -> {:cont, %{robot | direction: Map.fetch!(@turn_right, direction(robot))}}
-      "L", robot -> {:cont, %{robot | direction: Map.fetch!(@turn_left, direction(robot))}}
+      "R", robot -> {:cont, turn(robot, :right)}
+      "L", robot -> {:cont, turn(robot, :left)}
       "A", robot -> {:cont, advance(robot)}
-      _, _robot -> {:halt, {:error, "invalid instruction"}}
+      _, _ -> {:halt, {:error, "invalid instruction"}}
     end)
-  end
-
-  defp advance(robot) do
-    {old_x, old_y} = position(robot)
-    {delta_x, delta_y} = Map.fetch!(@advance, direction(robot))
-    %{robot | position: {old_x + delta_x, old_y + delta_y}}
   end
 
   @doc """
@@ -82,5 +54,54 @@ defmodule RobotSimulator do
   @spec position(robot :: any) :: {integer, integer}
   def position(robot) do
     robot[:position]
+  end
+
+  defp turn(robot, :right) do
+    %{
+      robot
+      | direction:
+          Map.fetch!(
+            %{
+              :north => :east,
+              :east => :south,
+              :south => :west,
+              :west => :north
+            },
+            direction(robot)
+          )
+    }
+  end
+
+  defp turn(robot, :left) do
+    %{
+      robot
+      | direction:
+          Map.fetch!(
+            %{
+              :north => :west,
+              :east => :north,
+              :south => :east,
+              :west => :south
+            },
+            direction(robot)
+          )
+    }
+  end
+
+  defp advance(robot) do
+    {old_x, old_y} = position(robot)
+
+    {delta_x, delta_y} =
+      Map.fetch!(
+        %{
+          :north => {0, 1},
+          :east => {1, 0},
+          :south => {0, -1},
+          :west => {-1, 0}
+        },
+        direction(robot)
+      )
+
+    %{robot | position: {old_x + delta_x, old_y + delta_y}}
   end
 end
